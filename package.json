@@ -1,0 +1,17 @@
+{
+  "name": "nuttybot",
+  "version": "1.0.0",
+  "description": "Discord bot side project",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "jayouimet",
+  "license": "ISC",
+  "dependencies": {
+    "ascii-table": "0.0.9",
+    "discord.js": "^12.3.1",
+    "dotenv": "^8.2.0",
+    "xml2js": "^0.4.23"
+  }
+}
