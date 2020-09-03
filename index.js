@@ -31,15 +31,15 @@ client.on("ready", () => {
     })
 });
 
-client.on("guildMemberAdd", member => {
-    let roles = member.guild.roles;
-    // Add new member role when a new member joins
-});
-
 client.on("message", async message => {
     if (message.author.bot) return;
     if (!message.guild) return;
-    if (!message.content.startsWith(prefix)) return;
+    if (!message.content.startsWith(prefix)) {
+        if (isAuthChannel(message.channel))
+            client.commands.get("authenticate").run(client, guilds, message, message.content.trim().split(/ +/g));
+        else
+            return;
+    }
     if (!message.member) message.member = await message.guild.fetchMember(message);
 
     const args = message.content.slice(prefix.length).trim().split(/ +/g);
@@ -55,3 +55,8 @@ client.on("message", async message => {
 });
 
 client.login(process.env.TOKEN);
+
+function isAuthChannel(channel) {
+    // This is a test in a test server of mine, gotta change it so its pulled from the database Guild -> VerificationChannelID
+    return channel.id == '706977013155495970' || channel.id == '751126987141021697';
+}
