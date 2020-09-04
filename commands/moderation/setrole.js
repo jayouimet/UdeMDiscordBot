@@ -14,23 +14,23 @@ module.exports = {
         const url = process.env.MONGO_URL;
         MongoClient.connect(url, async (err, db) => {
             if (err) return;
-            let dbo = db.db("BacInfoDiscordDB");
+            let dbo = db.db(process.env.MONGO_DATABASE);
 
-            let thisGuild = await dbo.collection("guilds").findOne({guildid: message.guild.id});
+            let thisGuild = await dbo.collection(process.env.MONGO_GUILD_TABLE).findOne({guildid: message.guild.id});
             if (!thisGuild) {
                 let newGuild = {
                     guildid: message.guild.id,
                     valrole: role.id
                 };
 
-                await dbo.collection("guilds").insertOne(newGuild, (err, res) => {
+                await dbo.collection(process.env.MONGO_GUILD_TABLE).insertOne(newGuild, (err, res) => {
                     if (err) return;
                     db.close();
 
                     return message.channel.send(`The validated user's role has been updated to \`${role.name}\``);
                 });
             } else {
-                await dbo.collection("guilds").updateOne({guildid: message.guild.id}, { $set: {valrole: role.id} }, (err, res) => {
+                await dbo.collection(process.env.MONGO_GUILD_TABLE).updateOne({guildid: message.guild.id}, { $set: {valrole: role.id} }, (err, res) => {
                     if (err) return;
                     db.close();
             

@@ -25,19 +25,19 @@ module.exports = {
         const url = process.env.MONGO_URL;
         MongoClient.connect(url, async (err, db) => {
             if (err) return;
-            let dbo = db.db("BacInfoDiscordDB");
+            let dbo = db.db(process.env.MONGO_DATABASE);
             
-            let userInDB = await dbo.collection("users").findOne({email: messageTo});
+            let userInDB = await dbo.collection(process.env.MONGO_USER_TABLE).findOne({email: messageTo});
             
             if (userInDB && userInDB.userid != message.author.id) return message.channel.send("You already have a discord account linked to that email. Contact an administrator for help.");
 
-            let newUser = await dbo.collection("users").findOne({userid: message.author.id});
+            let newUser = await dbo.collection(process.env.MONGO_USER_TABLE).findOne({userid: message.author.id});
 
             if (newUser) {
                 newUser.email = messageTo;
                 newUser.passcode = randomCode;
 
-                await dbo.collection("users").updateOne({userid: newUser.userid}, { $set: {email: messageTo, passcode: randomCode} }, (err, res) => {
+                await dbo.collection(process.env.MONGO_USER_TABLE).updateOne({userid: newUser.userid}, { $set: {email: messageTo, passcode: randomCode} }, (err, res) => {
                     if (err) return;
                     db.close();
     
@@ -68,7 +68,7 @@ module.exports = {
                     passcode: randomCode
                 };
 
-                await dbo.collection("users").insertOne(newUser, (err, res) => {
+                await dbo.collection(process.env.MONGO_USER_TABLE).insertOne(newUser, (err, res) => {
                     if (err) return;
                     db.close();
     

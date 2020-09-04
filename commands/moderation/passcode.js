@@ -10,19 +10,17 @@ module.exports = {
         const url = process.env.MONGO_URL;
         MongoClient.connect(url, async (err, db) => {
             if (err) return;
-            let dbo = db.db("BacInfoDiscordDB");
+            let dbo = db.db(process.env.MONGO_DATABASE);
 
-            let thisGuild = await dbo.collection("guilds").findOne({guildid: message.guild.id});
+            let thisGuild = await dbo.collection(process.env.MONGO_GUILD_TABLE).findOne({guildid: message.guild.id});
             if (!thisGuild) return message.channel.send("Couldn't give you the verified user's role, ask an administrator to set the role using the appropriate command.");
 
-            userToAuth = await dbo.collection("users").findOne({userid: message.author.id});
+            userToAuth = await dbo.collection(process.env.MONGO_USER_TABLE).findOne({userid: message.author.id});
 
             if (!userToAuth) return;
             let modified = false;
             args.forEach(arg => {
                 if (arg == userToAuth.passcode) {
-                    // Give a role 751122263960715294
-                    // 751220115739246612
                     try {
                         let role = message.guild.roles.cache.get(thisGuild.valrole); 
                            
