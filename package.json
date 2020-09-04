@@ -1,5 +1,5 @@
 {
-  "name": "UdeMDiscordBot",
+  "name": "udemdiscordbot",
   "version": "1.0.0",
   "description": "Used to filter trolls on a private discord",
   "main": "index.js",
