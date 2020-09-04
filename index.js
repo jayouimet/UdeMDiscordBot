@@ -50,8 +50,3 @@ client.on("message", async message => {
 });
 
 client.login(process.env.TOKEN);
-
-/*function isAuthChannel(channel) {
-    // This is a test in a test server of mine, gotta change it so its pulled from the database Guild -> VerificationChannelID
-    return channel.id == '706977013155495970' || channel.id == '751126987141021697';
-}*/
